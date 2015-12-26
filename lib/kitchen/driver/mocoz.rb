@@ -1,7 +1,8 @@
+# -*- encoding: utf-8 -*-
+
 require 'kitchen'
 require 'open-uri'
 require 'nokogiri'
-
 
 module Kitchen
 
@@ -31,23 +32,20 @@ module Kitchen
         end
         
         doc = Nokogiri::HTML.parse(html, nil)
-        
-        recipes = []
-        doc.xpath('//*').each do |node|
-          unless node.css('h3').inner_text == ""
-            recipes << node.css('h3').inner_text
-          end
-        end
-        
-        recipes = recipes.sample.split("\n").compact.reject(&:empty?)
-        
-        if recipes.length > 1
-          recipe = recipes.sample
-        else
-          recipe = recipes[0]
-        end
 
-        return recipe
+        recipes = []
+        doc.xpath('//h3').each do |node|
+          moco = []
+          moco << node.inner_text
+          moco << node.css('a').attribute('href').value
+          recipes << moco
+        end
+        
+        # recipes = recipes.sample.compact.reject(&:empty?)
+        recipe = recipes.sample
+        res = recipe[0].to_s.gsub("\n", "") + " | " + config[:mocoz_url].to_s.gsub("index.html","") + recipe[1]
+        
+        return res
       end
 
     end
