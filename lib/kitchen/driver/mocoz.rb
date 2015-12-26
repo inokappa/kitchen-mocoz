@@ -11,17 +11,16 @@ module Kitchen
     #
     #
     class Mocoz < Kitchen::Driver::SSHBase
-      plugin_version Kitchen::Driver::MOCOZ_VERSION
 
       default_config :mocoz_url, nil
 
       def create(state)
-        state[:recipe] = get_recipe
         puts get_recipe
+        puts "いただきます"
       end
 
       def destroy(state)
-        puts "#{state[:recipe]} ごちそうさまでした"
+        puts "ごちそうさまでした"
       end
 
       def get_recipe
